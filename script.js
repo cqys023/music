@@ -1,69 +1,49 @@
-body {
-    margin: 0;
-    background: #0d0d0d;
-    color: #fff;
-    font-family: -apple-system, BlinkMacSystemFont;
+const API = "https://music-api.gdstudio.xyz/api.php";
+
+let audio = document.getElementById("audio");
+
+document.getElementById("kw").addEventListener("keypress", function(e){
+    if(e.key === "Enter") search();
+});
+
+async function search() {
+    let kw = document.getElementById("kw").value;
+
+    let res = await fetch(`${API}?types=search&source=netease&name=${kw}`);
+    let data = await res.json();
+
+    let list = document.getElementById("list");
+    list.innerHTML = "";
+
+    data.result.forEach(m => {
+        let div = document.createElement("div");
+        div.className = "item";
+
+        div.innerHTML = `
+            <div class="title">${m.name}</div>
+            <div class="artist">${m.artist}</div>
+        `;
+
+        div.onclick = () => play(m);
+
+        list.appendChild(div);
+    });
 }
 
-.container {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 20px;
-}
+async function play(music) {
 
-.search-box input {
-    width: 100%;
-    padding: 14px;
-    border-radius: 10px;
-    border: none;
-    background: #1a1a1a;
-    color: #fff;
-    font-size: 16px;
-}
+    document.getElementById("title").innerText =
+        music.name + " - " + music.artist;
 
-.music-list {
-    margin-top: 20px;
-}
+    let urlRes = await fetch(`${API}?types=url&id=${music.id}`);
+    let urlData = await urlRes.json();
 
-.item {
-    padding: 12px;
-    border-bottom: 1px solid #222;
-    cursor: pointer;
-    transition: 0.2s;
-}
+    audio.src = urlData.url;
+    audio.play();
 
-.item:hover {
-    background: #1f1f1f;
-}
+    let lrcRes = await fetch(`${API}?types=lyric&id=${music.id}`);
+    let lrcData = await lrcRes.json();
 
-.title {
-    font-size: 15px;
-}
-
-.artist {
-    font-size: 12px;
-    color: #888;
-}
-
-.player {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: #111;
-    padding: 15px;
-    border-top: 1px solid #222;
-}
-
-#title {
-    margin-bottom: 5px;
-    font-size: 14px;
-}
-
-.lyric {
-    margin-top: 10px;
-    font-size: 12px;
-    color: #aaa;
-    max-height: 120px;
-    overflow-y: auto;
+    document.getElementById("lyric").innerText =
+        lrcData.lyric || "暂无歌词";
 }
