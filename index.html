@@ -2,23 +2,25 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>CF音乐播放器</title>
+<title>Music</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="app">
-    <h1>🎵 音乐播放器</h1>
+<div class="container">
 
-    <input id="kw" placeholder="输入歌曲名">
-    <button onclick="search()">搜索</button>
-
-    <ul id="list"></ul>
-
-    <div class="player-box">
-        <audio id="player" controls></audio>
-        <pre id="lyric"></pre>
+    <div class="search-box">
+        <input id="kw" placeholder="搜索音乐..." />
     </div>
+
+    <div id="list" class="music-list"></div>
+
+    <div class="player">
+        <div id="title">未播放</div>
+        <audio id="audio" controls></audio>
+        <div id="lyric" class="lyric"></div>
+    </div>
+
 </div>
 
 <script src="script.js"></script>
