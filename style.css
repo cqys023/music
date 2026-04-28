@@ -1,0 +1,49 @@
+body {
+    font-family: Arial;
+    background: #111;
+    color: #fff;
+    text-align: center;
+}
+
+.app {
+    max-width: 600px;
+    margin: 40px auto;
+}
+
+input {
+    padding: 10px;
+    width: 70%;
+}
+
+button {
+    padding: 10px;
+    background: #ff6600;
+    border: none;
+    color: #fff;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    padding: 10px;
+    border-bottom: 1px solid #333;
+    cursor: pointer;
+}
+
+li:hover {
+    background: #222;
+}
+
+.player-box {
+    margin-top: 20px;
+}
+
+#lyric {
+    white-space: pre-wrap;
+    text-align: left;
+    max-height: 200px;
+    overflow: auto;
+}
