@@ -1,21 +1,29 @@
 const API = "https://music-api.gdstudio.xyz/api.php";
-
-let audio = document.getElementById("audio");
-
-document.getElementById("kw").addEventListener("keypress", function(e){
-    if(e.key === "Enter") search();
-});
+const SOURCE = "netease"; // 可换 kuwo / joox
 
 async function search() {
     let kw = document.getElementById("kw").value;
 
-    let res = await fetch(`${API}?types=search&source=netease&name=${kw}`);
+    let res = await fetch(
+        `${API}?types=search&source=${SOURCE}&name=${encodeURIComponent(kw)}`
+    );
+
     let data = await res.json();
+
+    console.log("返回数据:", data); // 调试用
+
+    // 兼容不同结构
+    let listData = data.result || data.data || [];
 
     let list = document.getElementById("list");
     list.innerHTML = "";
 
-    data.result.forEach(m => {
+    if (!listData.length) {
+        list.innerHTML = "<div>没搜到（可能API挂了）</div>";
+        return;
+    }
+
+    listData.forEach(m => {
         let div = document.createElement("div");
         div.className = "item";
 
@@ -35,13 +43,25 @@ async function play(music) {
     document.getElementById("title").innerText =
         music.name + " - " + music.artist;
 
-    let urlRes = await fetch(`${API}?types=url&id=${music.id}`);
+    // 播放
+    let urlRes = await fetch(
+        `${API}?types=url&source=${SOURCE}&id=${music.id}&br=320`
+    );
     let urlData = await urlRes.json();
 
+    if (!urlData.url) {
+        alert("播放失败（接口限制或失效）");
+        return;
+    }
+
+    let audio = document.getElementById("audio");
     audio.src = urlData.url;
     audio.play();
 
-    let lrcRes = await fetch(`${API}?types=lyric&id=${music.id}`);
+    // 歌词
+    let lrcRes = await fetch(
+        `${API}?types=lyric&source=${SOURCE}&id=${music.id}`
+    );
     let lrcData = await lrcRes.json();
 
     document.getElementById("lyric").innerText =
