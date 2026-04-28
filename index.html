@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>CF音乐播放器</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+    <h1>🎵 音乐播放器</h1>
+
+    <input id="kw" placeholder="输入歌曲名">
+    <button onclick="search()">搜索</button>
+
+    <ul id="list"></ul>
+
+    <div class="player-box">
+        <audio id="player" controls></audio>
+        <pre id="lyric"></pre>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
